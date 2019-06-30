@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yhh.mybatis.mapper.UserMapper">
+
+
+    <!-- 定义sql片段
+        经验：是基于单表来定义sql片段，这样话这个sql片段可重用性才高 ,在sql片段中不要包括 where
+     -->
+    <sql id="query_user_where">
+        <if test="userCustom!=null">
+            <if test="userCustom.sex!=null and userCustom.sex!=''">
+                and user.sex = #{userCustom.sex}
+            </if>
+            <if test="userCustom.username!=null and userCustom.username!=''">
+                and user.username LIKE '%${userCustom.username}%'
+            </if>
+        </if>
+    </sql>
+
+    <select id="findUserList" parameterType="UserQueryVo" resultType="UserCustom">
+        SELECT * FROM USER
+        <!-- where可以自动去掉条件中的第一个and -->
+        <where>
+            <!-- 引用sql片段 的id，如果refid指定的id不在本mapper文件中，需要前边加namespace -->
+            <include refid="query_user_where" />
+        </where>
+    </select>
+
+    <!-- 动态SQL -->
+    <select id="findUserCount" parameterType="UserQueryVo" resultType="int">
+        SELECT count(*) FROM USER
+        <where>
+            <if test="userCustom != null">
+                <if test="userCustom.sex != null and userCustom.sex != ''">
+                    and user.sex=#{userCustom.sex}
+                </if>
+                <if test="userCustom.username != null and userCustom.username != ''">
+                    and user.username like '%${userCustom.username}%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+
+
+</mapper>

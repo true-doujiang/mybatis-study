@@ -1,0 +1,32 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd" >
+
+	
+	<!--
+	     1、处理器映射器 	将bean的name作为url进行查找 ，需要在配置Handler时指定beanname（就是url）
+		 所有的映射器都实现 HandlerMapping接口。
+	-->
+	<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+	
+	<!-- 配置Handler 我自己开发的 ,按照适配器的要求开发 ,bean的name即为url -->
+	<bean  name="/queryItems.action"  class="com.yhh.mybatis.controller.ItemsController" />
+
+
+	<!--
+	      2、处理器适配器 	所有处理器适配器都实现 HandlerAdapter接口
+		  SimpleControllerHandlerAdapter能执行实现 Controller接口的Handler。
+	-->
+	<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+
+
+	<!--
+	    3、视图解析器
+		解析jsp解析，默认使用jstl标签，classpath下的得有jstl的包  -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" />
+	
+	
+
+	
+</beans>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.yhh.mybatis.mapper.UserMapper">
+
+    <!-- 开启本mapper的namespace下的二缓存
+		type：指定cache接口的实现类的类型，mybatis默认使用PerpetualCache。
+		如果要和ehcache整合，需要配置type为ehcache实现cache接口的类型，
+		但是要加入俩个jar包  ehcache-core-2.6.5.jar mybatis-ehcache-1.0.2.jar
+	 -->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+
+
+    <select id="findUserList" parameterType="UserQueryVo" resultType="UserCustom">
+        SELECT * FROM USER
+        <where>
+            <if test="userCustom!=null">
+                <if test="userCustom.sex!=null and userCustom.sex!=''">
+                    and user.sex = #{userCustom.sex}
+                </if>
+                <if test="userCustom.username!=null and userCustom.username!=''">
+                    and user.username LIKE '%${userCustom.username}%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+    <!-- useCache="false" 可以禁用当前select语句的二级缓存，默认情况是true -->
+    <select id="findUserById" parameterType="int" resultType="user" >
+        SELECT * FROM USER WHERE id=#{value}
+    </select>
+
+    <!-- flushCache="false" sqlsession.commit()不清空缓存， 默认情况是true 傻逼才会设置false -->
+    <update id="updateUser" parameterType="User" >
+        update user set username=#{username},birthday=#{birthday},sex=#{sex},address=#{address}
+        where id=#{id}
+    </update>
+
+</mapper>

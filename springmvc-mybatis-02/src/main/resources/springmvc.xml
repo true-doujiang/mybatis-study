@@ -1,0 +1,38 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+	<!-- 配置Handler1 -->
+	<bean  id="itemsController1" name="/queryItems.action" class="com.yhh.mybatis.controller.ItemsController21" />
+	<!-- 配置另外一个Handler2 -->
+	<bean id="itemsController2" class="com.yhh.mybatis.controller.ItemsController22" />
+	
+	<!-- 处理器映射器1 -->
+	<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+	<!-- 处理器映射器2 -->
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<!-- 对id=itemsController1进行url映射，url是key -->
+				<prop key="/queryItems1.action">itemsController1</prop>
+				<prop key="/queryItems2.action">itemsController1</prop>
+				<prop key="/queryItems3.action">itemsController2</prop>
+			</props>
+		</property>
+	</bean>
+	
+	
+	<!-- 处理器适配器 1	
+	 	  通过查看原代码: 此适配器(SimpleControllerHandlerAdapter)能执行实现 Controller接口的Handler。 -->
+	<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+	<!-- 另一个非注解的适配器 2
+		  通过查看原代码: 此适配器要求编写的Handler实现 HttpRequestHandler接口-->
+	<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter" />
+	
+	
+	<!-- 视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" />
+
+	
+</beans>
